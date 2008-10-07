@@ -372,7 +372,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * Initializes graphics engine with specified size, mode, bufferstrategy,
 	 * and associates it with specified <code>Game</code> object.
 	 */
-	public void setup(Game game, Dimension d, boolean fullscreen, boolean bufferstrategy) {
+	public void setup(Game game, Dimension d, boolean fullscreen, boolean bufferstrategy, boolean drawdecorations) {
 		try {
 			// validate java version first
 			if (!this.validJavaVersion()) {
@@ -426,7 +426,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 			
 			if (!fullscreen) {
 				// windowed mode
-				WindowedMode mode = new WindowedMode(d, bufferstrategy);
+				WindowedMode mode = new WindowedMode(d, bufferstrategy, drawdecorations);
 				mode.getFrame().removeWindowListener(
 				        WindowExitListener.getInstance());
 				mode.getFrame().addWindowListener(this);
@@ -458,11 +458,20 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	
 	/**
 	 * Initializes graphics engine with specified size, mode, using
-	 * bufferstrategy by default, and associates it with specified
-	 * <code>Game</code> object.
+	 * bufferstrategy and window decorations by default, and associates 
+	 * it with specified <code>Game</code> object.
 	 */
 	public void setup(Game game, Dimension d, boolean fullscreen) {
-		this.setup(game, d, fullscreen, true);
+		this.setup(game, d, fullscreen, true, true);
+	}
+	
+	/**
+	 * Initializes graphics engine with specified size, mode, using
+	 * bufferstrategy, and associates by default, and associates
+	 * it with specified <code>Game</code> object.
+	 */
+	public void setup(Game game, Dimension d, boolean fullscreen, boolean drawdecorations) {
+		this.setup(game, d, fullscreen, true,drawdecorations);
 	}
 	
 	/**

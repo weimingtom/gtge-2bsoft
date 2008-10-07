@@ -486,7 +486,7 @@ public abstract class Game {
 		
 		if (this.finish) {
 			this.bsGraphics.cleanup();
-			this.notifyExit();
+			this.notifyExit(false);
 		}
 	}
 	
@@ -692,15 +692,19 @@ public abstract class Game {
 	 * Override this method to create a custom exit dialog, and be sure to call
 	 * <code>System.exit()</code> at the end.
 	 */
-	protected void notifyExit() {
+	
+	protected void notifyExit(boolean fullyClose) {
 		if ((this.bsGraphics instanceof Applet) == false) {
-			// non-applet game should call System.exit(0);
-			try {
-				System.exit(0);
+			if(fullyClose){
+				// non-applet game should call System.exit(0);
+				//fullyClose applies when there is another window that we don't want
+				//to close. Default value of true will fully clean the JVM.
+				try {
+					System.exit(0);
+				}
+				catch (Exception e) {
+				}
 			}
-			catch (Exception e) {
-			}
-			
 		}
 		else {
 			// applet game should display to the user
@@ -812,6 +816,13 @@ public abstract class Game {
 			applet.repaint();
 			canvas.repaint();
 		}
+	}
+	/**
+	 * Notified when the game is about to quit. Uses default fullyClose value,
+	 * meaning in will completely clean the JVM.
+	 */
+	protected void notifyExit(){
+		this.notifyExit(true);
 	}
 	
 	/**
