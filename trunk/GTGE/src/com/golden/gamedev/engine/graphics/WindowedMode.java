@@ -31,6 +31,8 @@ import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.VolatileImage;
 
+import javax.swing.JDialog;
+
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.util.ImageUtil;
 
@@ -58,8 +60,7 @@ public class WindowedMode implements BaseGraphics {
 	        .getDefaultConfiguration();
 	
 	/** *************************** AWT COMPONENT ******************************* */
-	
-	private Frame frame; // top frame where the canvas is put
+	private JDialog frame; // top frame where the canvas is put
 	private Canvas canvas;
 	
 	private Dimension size;
@@ -82,13 +83,13 @@ public class WindowedMode implements BaseGraphics {
 	 * whether want to use bufferstrategy or volatile image.
 	 * @param d The resolution of the window.
 	 * @param bufferstrategy If a buffer strategy shall be used.
+	 * @param drawdecorations Send false if you don't want window decorations.
 	 */
-	public WindowedMode(Dimension d, boolean bufferstrategy) {
+	public WindowedMode(Dimension d, boolean bufferstrategy, boolean drawdecorations) {
 		this.size = d;
 		
 		// sets game frame
-		this.frame = new Frame("Golden T Game Engine", WindowedMode.CONFIG);
-		
+		this.frame = new JDialog();
 		try {
 			// set frame icon
 			this.frame.setIconImage(ImageUtil.getImage(WindowedMode.class
@@ -110,6 +111,8 @@ public class WindowedMode implements BaseGraphics {
 		// frame title bar and border (frame insets) makes
 		// game screen smaller than requested size
 		// we must enlarge the frame by it's insets size
+
+		this.frame.setUndecorated(!drawdecorations);
 		this.frame.setVisible(true);
 		Insets inset = this.frame.getInsets();
 		this.frame.setVisible(false);
@@ -300,10 +303,12 @@ public class WindowedMode implements BaseGraphics {
 	 * Returns the top level frame where this graphics engine is being put on.
 	 * @return The top level frame.
 	 */
-	public Frame getFrame() {
-		return this.frame;
-	}
-	
+	//public Frame getFrame() {
+	//	return this.frame;
+	//}
+	public JDialog getFrame() {
+			return this.frame;
+		}
 	/**
 	 * Returns whether this graphics engine is using buffer strategy or volatile
 	 * image.
@@ -336,7 +341,7 @@ public class WindowedMode implements BaseGraphics {
 	}
 	
 	public Image getWindowIcon() {
-		return this.frame.getIconImage();
+		return this.frame.getIconImages().get(0);
 	}
 	
 }
