@@ -129,7 +129,7 @@ public class LibInfo extends Game {
 	 */
 	public static void main(String[] args) {
 		GameLoader game = new GameLoader();
-		game.setup(new LibInfo(), new Dimension(600, 450), false);
+		game.setup(new LibInfo(), new Dimension(600, 450), 1);
 		game.start();
 	}
 	

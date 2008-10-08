@@ -31,10 +31,9 @@ import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.VolatileImage;
 
-import javax.swing.JDialog;
-
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.util.ImageUtil;
+
 
 /**
  * Graphics engine for Windowed Environment.
@@ -60,7 +59,7 @@ public class WindowedMode implements BaseGraphics {
 	        .getDefaultConfiguration();
 	
 	/** *************************** AWT COMPONENT ******************************* */
-	private JDialog frame; // top frame where the canvas is put
+	private Frame frame; // top frame where the canvas is put
 	private Canvas canvas;
 	
 	private Dimension size;
@@ -89,7 +88,8 @@ public class WindowedMode implements BaseGraphics {
 		this.size = d;
 		
 		// sets game frame
-		this.frame = new JDialog();
+		this.frame = new Frame("Golden T Game Engine", WindowedMode.CONFIG);
+		
 		try {
 			// set frame icon
 			this.frame.setIconImage(ImageUtil.getImage(WindowedMode.class
@@ -97,6 +97,7 @@ public class WindowedMode implements BaseGraphics {
 		}
 		catch (Exception e) {
 		}
+				
 		
 		this.frame.addWindowListener(WindowExitListener.getInstance());
 		this.frame.setResizable(false); // non resizable frame
@@ -306,7 +307,7 @@ public class WindowedMode implements BaseGraphics {
 	//public Frame getFrame() {
 	//	return this.frame;
 	//}
-	public JDialog getFrame() {
+	public Frame getFrame() {
 			return this.frame;
 		}
 	/**
@@ -341,7 +342,7 @@ public class WindowedMode implements BaseGraphics {
 	}
 	
 	public Image getWindowIcon() {
-		return this.frame.getIconImages().get(0);
+		return this.frame.getIconImage();
 	}
 	
 }
