@@ -34,10 +34,9 @@ import java.awt.image.VolatileImage;
 import javax.swing.JDialog;
 
 import com.golden.gamedev.engine.BaseGraphics;
-import com.golden.gamedev.util.ImageUtil;
 
 /**
- * Graphics engine for Windowed Environment.
+ * Graphics engine for a Dialog Environment.
  * <p>
  * 
  * See {@link com.golden.gamedev.engine.BaseGraphics} for how to use graphics
@@ -297,9 +296,7 @@ public class DialogMode implements BaseGraphics {
 	 * Returns the top level frame where this graphics engine is being put on.
 	 * @return The top level frame.
 	 */
-	//public Frame getFrame() {
-	//	return this.frame;
-	//}
+	
 	public JDialog getFrame() {
 			return this.frame;
 		}
