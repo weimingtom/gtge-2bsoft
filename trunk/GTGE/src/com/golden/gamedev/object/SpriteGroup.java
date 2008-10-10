@@ -748,4 +748,26 @@ public class SpriteGroup {
 		        + this.background + "]";
 	}
 	
+	/**
+	 * Takes given gravity constant into account and corrects x axis position.
+	 */
+	public void correctGravity(double gravity) {
+		for (int i = 0; i < this.size; i++) {
+			if (this.sprites[i].isActive()) {
+				this.sprites[i].correctGravity(gravity);
+			}
+		}
+    }
+	
+	/**
+	 * Takes given wind power constant into account and corrects x axis position.
+	 */
+	public void correctWind(double windpower) {
+		for (int i = 0; i < this.size; i++) {
+			if (this.sprites[i].isActive()) {
+				this.sprites[i].correctWind(windpower);
+			}
+		}
+    }
+	
 }
