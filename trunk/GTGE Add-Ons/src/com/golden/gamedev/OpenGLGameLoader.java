@@ -159,7 +159,7 @@ public class OpenGLGameLoader extends GameLoader {
 				this.gfx.cleanup();
 			}
 			
-			this.setup(game, d, fullscreen, false);
+			this.setup(game, d, 2/*fullscreen*/, false,true);
 		}
 	}
 	
@@ -307,7 +307,7 @@ public class OpenGLGameLoader extends GameLoader {
 				this.gfx.cleanup();
 			}
 			
-			this.setup(game, d, orig, false);
+			this.setup(game, d, /*orig*/2, false);
 		}
 	}
 	
