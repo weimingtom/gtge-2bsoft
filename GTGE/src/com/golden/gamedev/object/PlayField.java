@@ -334,10 +334,10 @@ public class PlayField {
 	protected void updateSpriteGroups(long elapsedTime) {
 		for (int i = 0; i < this.groups.length; i++) {
 			if (this.groups[i].isActive()) {
+				if(windpower!=0) //there is wind blowing in the playfield
+					this.groups[i].correctWind(windpower);
 				if(gravity!=0) //there is gravity in the playfield
 					this.groups[i].correctGravity(gravity);
-				if(windpower!=0)
-					this.groups[i].correctWind(windpower);
 				this.groups[i].update(elapsedTime);
 			}
 		}

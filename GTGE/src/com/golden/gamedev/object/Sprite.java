@@ -79,8 +79,9 @@ public class Sprite implements java.io.Serializable {
 	
     protected double bounce = 0.0;  //bouncing constant
     protected boolean onground;		//Is the sprite on ground?
-    protected double verticalvelocity=0;		//vertical velocity, used in gravity calculations
-	protected boolean fixedposition=false; //Set true if i'm a movable sprite
+    protected double verticalvelocity=0.0;		//vertical velocity, used in gravity calculations
+	protected double horizontalvelocity=0.0;	//horizontal velocity, used in wind calculation
+    protected boolean fixedposition=false; //Set true if i'm a movable sprite
     
 	// ///////// optimization ///////////
 	private static double screenX, screenY; // screen position = x-background.x
@@ -699,7 +700,18 @@ public class Sprite implements java.io.Serializable {
 	 */
     public void correctWind(double windpower) {
     	if(getFixedposition()==false){
-    		this.setX (this.getX() + windpower);
+    		double velocity=this.getHorizontalVelocity();
+    		if (velocity != 0) {
+    				this.setX (this.getX() + velocity);
+    		} else {
+    			velocity = 0;
+    		}
+    		if(this.getOnground() == false) {
+    			velocity += windpower;
+    		}else{
+    			velocity = 0; 
+    			}
+    		this.setHorizontalVelocity(velocity);
     	}
     }
 	
@@ -953,6 +965,20 @@ public class Sprite implements java.io.Serializable {
 	 */
     public double getVerticalVelocity() {
         return verticalvelocity;
+    }
+
+    /**
+	 * Sets sprite vertical velocity, used in gravity and bouncing corrections.
+	 */
+    public void setHorizontalVelocity(double _horizontalvelocity) {
+    	horizontalvelocity=_horizontalvelocity;
+    }
+    
+    /**
+	 * Returns sprite vertical velocity, used in gravity and bouncing corrections.
+	 */
+    public double getHorizontalVelocity() {
+        return horizontalvelocity;
     }
     
     /**
