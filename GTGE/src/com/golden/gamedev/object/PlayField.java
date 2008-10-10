@@ -51,6 +51,11 @@ public class PlayField {
 	private Sprite[] cacheSprite;
 	private Comparator comparator;
 	
+	/** ****************************** PHYSICS ********************************** */
+	
+	private double gravity=0.0; //Gravity constant
+	private double windpower=0.0; //Wind power constant
+	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
 	/** ************************************************************************* */
@@ -329,6 +334,10 @@ public class PlayField {
 	protected void updateSpriteGroups(long elapsedTime) {
 		for (int i = 0; i < this.groups.length; i++) {
 			if (this.groups[i].isActive()) {
+				if(gravity!=0) //there is gravity in the playfield
+					this.groups[i].correctGravity(gravity);
+				if(windpower!=0)
+					this.groups[i].correctWind(windpower);
 				this.groups[i].update(elapsedTime);
 			}
 		}
@@ -529,4 +538,32 @@ public class PlayField {
 		this.comparator = c;
 	}
 	
+	/**
+	 * Sets custom gravity constant to the playfield.
+	 * @param _gravity Used to set gravity. 0.5 = Earth, 0.05 = Moon
+	 */
+	public void setGravity(double _gravity){
+		gravity=_gravity;
+	}
+	
+	/**
+	 * Gets current gravity constant for the playfield.
+	 */
+	public double getgravity(){
+		return gravity;
+	}
+
+	/**
+	 * Sets custom wind power constant to the playfield.
+	 */
+	public void setWindpower(double _windpower){
+		windpower=_windpower;
+	}
+	
+	/**
+	 * Gets current wind power constant for the playfield.
+	 */
+	public double getWindpower(){
+		return windpower;
+	}	
 }

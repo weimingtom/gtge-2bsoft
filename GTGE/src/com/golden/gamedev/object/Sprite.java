@@ -76,7 +76,12 @@ public class Sprite implements java.io.Serializable {
 	private double x, y;
 	private double horizontalSpeed, verticalSpeed; // in pixels per millisecond
 	private double oldX, oldY; // old position before this sprite moves
-	        
+	
+    protected double bounce = 0.0;  //bouncing constant
+    protected boolean onground;		//Is the sprite on ground?
+    protected double verticalvelocity=0;		//vertical velocity, used in gravity calculations
+	protected boolean fixedposition=false; //Set true if i'm a movable sprite
+    
 	// ///////// optimization ///////////
 	private static double screenX, screenY; // screen position = x-background.x
 	        
@@ -689,6 +694,53 @@ public class Sprite implements java.io.Serializable {
 		return this.isOnScreen(0, 0, 0, 0);
 	}
 	
+	/**
+	 * Takes given wind power constant into account and corrects x axis position.
+	 */
+    public void correctWind(double windpower) {
+    	if(getFixedposition()==false){
+    		this.setX (this.getX() + windpower);
+    	}
+    }
+	
+	/**
+	 * Takes given gravity constant into account and corrects y axis position. If a 
+	 * bouncing constant was set and proper collision handling was done, this will 
+	 * make the sprite bounce. Bear in mind that for bounce to happen, "onground" must
+	 * be set to true (via setOnground) when the sprite touches the ground.
+	 */
+    public void correctGravity(double gravity) {
+    	if(getFixedposition()==false){
+    		double velocity=this.getVerticalVelocity();
+    		boolean onground=this.getOnground();
+    		double bounce=this.getBounce();
+    		if (velocity > 0.3 || velocity < -0.6) {
+    			if(!((onground==true) && (bounce==0)))
+    				this.setY (this.getY() + velocity);
+    		} else {
+    			velocity = 0;
+    		}
+
+    		/*Checks if the sprite collided with the ground.
+        The correct way to handle onground would be to do a collision check against
+        the ground acting sprite. If a collision took place, onground should be set
+        to true
+    	 */
+    		if(onground == false) {
+    			velocity += gravity;
+    		}else{
+    			if(velocity > 0.5) {
+    				// The Bounce Effect
+    				velocity = (velocity * -bounce); 
+    			}
+    		}
+    		this.setVerticalVelocity(velocity);
+    		/*onground must be set to false. If a collision occours, the collision handler
+        should set the correct value.*/
+    		this.setOnground(false);
+    	}
+    }
+	
 	/** ************************************************************************* */
 	/** ************************* UPDATE SPRITE ********************************* */
 	/** ************************************************************************* */
@@ -888,5 +940,62 @@ public class Sprite implements java.io.Serializable {
 	// + this);
 	// super.finalize();
 	// }
-	
+
+    /**
+	 * Sets sprite vertical velocity, used in gravity and bouncing corrections.
+	 */
+    public void setVerticalVelocity(double _verticalvelocity) {
+        verticalvelocity=_verticalvelocity;
+    }
+    
+    /**
+	 * Returns sprite vertical velocity, used in gravity and bouncing corrections.
+	 */
+    public double getVerticalVelocity() {
+        return verticalvelocity;
+    }
+    
+    /**
+	 * Sets sprite bouncing constant, used to make the sprite bounce when in contact
+	 * with the ground.
+	 */
+    public void setBounce(double _bounce) {
+    	bounce=_bounce;
+    }
+    
+    /**
+	 * Returns sprite bouncing constant, used to make the sprite bounce when in contact
+	 * with the ground.
+	 */
+    public double getBounce() {
+        return bounce;
+    }
+
+    /**
+	 * Sets sprite onground, used to know if a sprite is on the ground.
+	 */
+    public void setOnground(boolean _onground) {
+        onground = _onground;
+    }
+    
+    /**
+	 * Returns sprite onground, used to know if a sprite is on the ground.
+	 */
+    public boolean getOnground() {
+    	return onground;
+    }
+    
+    /**
+	 * Sets sprite fixedposition, used to mark sprites that are fixed to a point.
+	 */
+    public void setFixedposition(boolean _fixedposition) {
+    	fixedposition = _fixedposition;
+    }
+    
+    /**
+	 * Returns sprite fixedposition, used to mark sprites that are fixed to a point.
+	 */
+    public boolean getFixedposition() {
+    	return fixedposition;
+    }    
 }
