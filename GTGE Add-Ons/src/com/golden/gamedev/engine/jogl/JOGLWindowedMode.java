@@ -24,6 +24,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
 
+import javax.swing.JDialog;
+
 import net.java.games.jogl.GLCanvas;
 import net.java.games.jogl.GLCapabilities;
 import net.java.games.jogl.GLDrawableFactory;
@@ -77,11 +79,12 @@ public class JOGLWindowedMode implements BaseGraphics {
 	 * Creates new instance of Windowed Graphics Engine with specified size, and
 	 * bufferstrategy.
 	 */
-	public JOGLWindowedMode(Dimension d, boolean vsync) {
+	public JOGLWindowedMode(Dimension d, boolean vsync, boolean drawdecorations) {
 		this.size = d;
 		
 		// sets game frame
 		this.frame = new Frame("Golden T Game Engine");
+		this.frame.setUndecorated(!drawdecorations);
 		
 		try {
 			this.frame.setIconImage(ImageUtil.getImage(WindowExitListener.class

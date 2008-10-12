@@ -23,6 +23,7 @@ import java.lang.reflect.Constructor;
 import javax.swing.JOptionPane;
 
 import com.golden.gamedev.engine.graphics.WindowExitListener;
+import com.golden.gamedev.engine.jogl.JOGLDialogMode;
 import com.golden.gamedev.engine.jogl.JOGLFullScreenMode;
 import com.golden.gamedev.engine.jogl.JOGLWindowedMode;
 import com.golden.gamedev.engine.lwjgl.LWJGLInput;
@@ -180,8 +181,8 @@ public class OpenGLGameLoader extends GameLoader {
 	 * Initializes OpenGL JOGL graphics engine with specified size, mode, and
 	 * associates it with specified <code>Game</code> object.
 	 */
-	public void setupJOGL(Game game, Dimension d, boolean fullscreen, boolean vsync) {
-		boolean orig = fullscreen;
+	public void setupJOGL(Game game, Dimension d, int ScreenMode, boolean vsync, boolean drawdecorations) {
+		int orig = ScreenMode;
 		try {
 			// validate java version first
 			if (!this.validJavaVersion()) {
@@ -206,7 +207,7 @@ public class OpenGLGameLoader extends GameLoader {
 			
 			// time to create the OpenGL Graphics Engine
 			
-			if (fullscreen) {
+			if (ScreenMode == 0) {
 				// fullscreen mode
 				JOGLFullScreenMode mode = null;
 				try {
@@ -250,7 +251,7 @@ public class OpenGLGameLoader extends GameLoader {
 					        "Graphics Engine Initialization",
 					        JOptionPane.ERROR_MESSAGE);
 					// fail-safe
-					fullscreen = false;
+					ScreenMode = 1;
 					
 					if (mode != null) {
 						mode.cleanup();
@@ -258,7 +259,7 @@ public class OpenGLGameLoader extends GameLoader {
 				}
 			}
 			
-			if (!fullscreen) {
+			if (ScreenMode == 1) {
 				// using reflection to load the class, this is a work around to
 				// avoid
 				// JOGL static initialization exception when JOGL library is not
@@ -269,12 +270,12 @@ public class OpenGLGameLoader extends GameLoader {
 				        .forName("com.golden.gamedev.engine.jogl.JOGLWindowedMode");
 				Constructor joglConstructor = joglClass
 				        .getConstructor(new Class[] {
-				                Dimension.class, boolean.class
+				                Dimension.class, boolean.class, boolean.class
 				        });
 				
 				JOGLWindowedMode mode = (JOGLWindowedMode) joglConstructor
 				        .newInstance(new Object[] {
-				                d, new Boolean(vsync)
+				                d, new Boolean(vsync), new Boolean(drawdecorations)
 				        });
 				mode.getFrame().removeWindowListener(
 				        WindowExitListener.getInstance());
@@ -283,6 +284,30 @@ public class OpenGLGameLoader extends GameLoader {
 				this.gfx = mode;
 			}
 			
+			if (ScreenMode == 2) {
+				// using reflection to load the class, this is a work around to
+				// avoid
+				// JOGL static initialization exception when JOGL library is not
+				// included in the bundle, when the game is not using JOGL
+				// graphics
+				// engine
+				Class joglClass = Class
+				        .forName("com.golden.gamedev.engine.jogl.JOGLDialogMode");
+				Constructor joglConstructor = joglClass
+				        .getConstructor(new Class[] {
+				                Dimension.class, boolean.class, boolean.class
+				        });
+				
+				JOGLDialogMode mode = (JOGLDialogMode) joglConstructor
+				        .newInstance(new Object[] {
+				                d, new Boolean(vsync), new Boolean(drawdecorations)
+				        });
+				mode.getFrame().removeWindowListener(
+				        WindowExitListener.getInstance());
+				mode.getFrame().addWindowListener(this);
+				
+				this.gfx = mode;
+			}
 			this.game = game;
 			this.game.bsGraphics = this.gfx;
 			
@@ -310,14 +335,33 @@ public class OpenGLGameLoader extends GameLoader {
 			this.setup(game, d, /*orig*/2, false);
 		}
 	}
+
+	/**
+	 * Initializes OpenGL JOGL graphics engine with specified size, ScreenMode, using
+	 * vsync and window decorations by default, and associates 
+	 * it with specified <code>Game</code> object.
+	 * Initializes graphics engine with specified 
+         * 
+         * @param ScreenMode If it is equal to 0, the game runs in full screen.
+         *                   If it is equal to 1, the game runs in Window mode.
+         *                   If it is equal to 2, the game runs in Dialog mode.
+	 */
+	
+	public void setupJOGL(Game game, Dimension d, int ScreenMode) {
+		this.setupJOGL(game, d, ScreenMode, true, true);
+	}
 	
 	/**
-	 * Initializes OpenGL JOGL graphics engine with specified size, mode, using
-	 * vsync by default, and associates it with specified <code>Game</code>
-	 * object.
+	 * Initializes OpenGL JOGL graphics engine with specified size, ScreenMode, using
+	 * vsync by default, and associates it with specified <code>Game</code> object.
+         * 
+         * @param ScreenMode If it is equal to 0, the game runs in full screen.
+         *                   If it is equal to 1, the game runs in Window mode.
+         *                   If it is equal to 2, the game runs in Dialog mode.
 	 */
-	public void setupJOGL(Game game, Dimension d, boolean fullscreen) {
-		this.setupJOGL(game, d, fullscreen, true);
+	
+	public void setupJOGL(Game game, Dimension d, int ScreenMode, boolean drawdecorations) {
+		this.setupJOGL(game, d, ScreenMode, true,drawdecorations);
 	}
 	
 }

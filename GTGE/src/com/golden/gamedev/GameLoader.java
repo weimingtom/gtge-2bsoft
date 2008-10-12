@@ -439,7 +439,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				
 				this.gfx = mode;
 			}
-                        if (ScreenMode==2){
+            if (ScreenMode==2){
                             // Dialog mode
 				DialogMode mode = new DialogMode(d, bufferstrategy, drawdecorations);
 				mode.getFrame().removeWindowListener(
@@ -486,7 +486,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	
 	/**
 	 * Initializes graphics engine with specified size, ScreenMode, using
-	 * bufferstrategy, and associates by default, and associates
+	 * bufferstrategy by default, and associates
 	 * it with specified <code>Game</code> object.
          * 
          * @param ScreenMode If it is equal to 0, the game runs in full screen.
