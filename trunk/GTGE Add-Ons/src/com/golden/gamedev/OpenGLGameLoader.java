@@ -159,8 +159,10 @@ public class OpenGLGameLoader extends GameLoader {
 			if (this.gfx != null) {
 				this.gfx.cleanup();
 			}
-			
-			this.setup(game, d, 2/*fullscreen*/, false,true);
+			if(fullscreen==true)
+				this.setup(game, d, 0, false,true);
+			else
+				this.setup(game, d, 1, false,true);
 		}
 	}
 	
@@ -182,7 +184,6 @@ public class OpenGLGameLoader extends GameLoader {
 	 * associates it with specified <code>Game</code> object.
 	 */
 	public void setupJOGL(Game game, Dimension d, int ScreenMode, boolean vsync, boolean drawdecorations) {
-		int orig = ScreenMode;
 		try {
 			// validate java version first
 			if (!this.validJavaVersion()) {
@@ -332,7 +333,7 @@ public class OpenGLGameLoader extends GameLoader {
 				this.gfx.cleanup();
 			}
 			
-			this.setup(game, d, /*orig*/2, false);
+			this.setup(game, d, ScreenMode, drawdecorations);
 		}
 	}
 
