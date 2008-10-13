@@ -549,7 +549,7 @@ public class PlayField {
 	/**
 	 * Gets current gravity constant for the playfield.
 	 */
-	public double getgravity(){
+	public double getGravity(){
 		return gravity;
 	}
 
