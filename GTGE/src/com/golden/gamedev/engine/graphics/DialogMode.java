@@ -18,22 +18,13 @@ package com.golden.gamedev.engine.graphics;
 
 // JFC
 import java.awt.Canvas;
-import java.awt.Component;
 import java.awt.Dimension;
 
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.image.BufferStrategy;
-import java.awt.image.VolatileImage;
+import java.awt.event.WindowListener;
 
 import javax.swing.JDialog;
-
-import com.golden.gamedev.engine.BaseGraphics;
 
 /**
  * Graphics engine for a Dialog Environment.
@@ -42,54 +33,33 @@ import com.golden.gamedev.engine.BaseGraphics;
  * See {@link com.golden.gamedev.engine.BaseGraphics} for how to use graphics
  * engine separated from Golden T Game Engine (GTGE) Frame Work.
  */
-public class DialogMode implements BaseGraphics {
+public class DialogMode extends WindowedMode {
 	
-	/** ************************ HARDWARE DEVICE ******************************** */
-	
-	/**
-	 * The graphics device that constructs this graphics engine.
-	 */
-	public static final GraphicsDevice DEVICE = GraphicsEnvironment
-	        .getLocalGraphicsEnvironment().getDefaultScreenDevice();
-	
-	/**
-	 * The graphics configuration that constructs this graphics engine.
-	 */
-	public static final GraphicsConfiguration CONFIG = DialogMode.DEVICE
-	        .getDefaultConfiguration();
 	
 	/** *************************** AWT COMPONENT ******************************* */
 	private JDialog frame; // top frame where the canvas is put
-	private Canvas canvas;
-	
-	private Dimension size;
-	
-	/** *************************** BACK BUFFER ********************************* */
-	
-	private VolatileImage offscreen; // backbuffer image
-	
-	private BufferStrategy strategy;
-	
-	// current graphics context
-	private Graphics2D currentGraphics;
 	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
 	/** ************************************************************************* */
 	
 	/**
-	 * Creates new instance of Windowed Graphics Engine with specified size, and
+	 * Creates new instance of Dialog Graphics Engine with specified size, and
 	 * whether want to use bufferstrategy or volatile image.
 	 * @param d The resolution of the window.
 	 * @param bufferstrategy If a buffer strategy shall be used.
 	 * @param drawdecorations Send false if you don't want window decorations.
 	 */
 	public DialogMode(Dimension d, boolean bufferstrategy, boolean drawdecorations) {
-		this.size = d;
 		
+		super(d,bufferstrategy,drawdecorations);
+	}
+
+	@Override
+	public void initialize(boolean bufferstrategy, boolean drawdecorations){
+	
 		// sets game frame
 		this.frame = new JDialog();
-		
 		
 		this.frame.addWindowListener(WindowExitListener.getInstance());
 		this.frame.setResizable(false); // non resizable frame
@@ -136,199 +106,22 @@ public class DialogMode implements BaseGraphics {
 	}
 	
 	/** ************************************************************************* */
-	/** ************************ GRAPHICS FUNCTION ****************************** */
-	/** ************************************************************************* */
-	
-	private boolean createBufferStrategy() {
-		boolean bufferCreated;
-		int num = 0;
-		do {
-			bufferCreated = true;
-			try {
-				// create bufferstrategy
-				this.canvas.createBufferStrategy(2);
-			}
-			catch (Exception e) {
-				// unable to create bufferstrategy!
-				bufferCreated = false;
-				try {
-					Thread.sleep(200);
-				}
-				catch (InterruptedException excp) {
-				}
-			}
-			
-			if (num++ > 5) {
-				break;
-			}
-		} while (!bufferCreated);
-		
-		if (!bufferCreated) {
-			System.err.println("BufferStrategy is not available!");
-			return false;
-		}
-		
-		// wait until bufferstrategy successfully setup
-		while (this.strategy == null) {
-			try {
-				this.strategy = this.canvas.getBufferStrategy();
-			}
-			catch (Exception e) {
-			}
-		}
-		
-		// wait until backbuffer successfully setup
-		Graphics2D gfx = null;
-		while (gfx == null) {
-			// this process will throw an exception
-			// if the backbuffer has not been created yet
-			try {
-				gfx = this.getBackBuffer();
-			}
-			catch (Exception e) {
-			}
-		}
-		
-		return true;
-	}
-	
-	private void createBackBuffer() {
-		if (this.offscreen != null) {
-			// backbuffer is already created,
-			// but not validate with current graphics configuration
-			this.offscreen.flush();
-			
-			// clear old backbuffer
-			this.offscreen = null;
-		}
-		
-		this.offscreen = DialogMode.CONFIG.createCompatibleVolatileImage(
-		        this.size.width, this.size.height);
-	}
-	
-	public Graphics2D getBackBuffer() {
-		if (this.currentGraphics == null) {
-			// graphics context is not created yet,
-			// or have been disposed by calling flip()
-			
-			if (this.strategy == null) {
-				// using volatile image
-				if (this.offscreen.validate(DialogMode.CONFIG) == VolatileImage.IMAGE_INCOMPATIBLE) {
-					// volatile image is not valid
-					this.createBackBuffer();
-				}
-				this.currentGraphics = this.offscreen.createGraphics();
-				
-			}
-			else {
-				// using buffer strategy
-				this.currentGraphics = (Graphics2D) this.strategy
-				        .getDrawGraphics();
-			}
-		}
-		
-		return this.currentGraphics;
-	}
-	
-	public boolean flip() {
-		// disposing current graphics context
-		this.currentGraphics.dispose();
-		this.currentGraphics = null;
-		
-		// show to screen
-		if (this.strategy == null) {
-			this.canvas.getGraphics().drawImage(this.offscreen, 0, 0, null);
-			
-			// sync the display on some systems.
-			// (on linux, this fixes event queue problems)
-			Toolkit.getDefaultToolkit().sync();
-			
-			return (!this.offscreen.contentsLost());
-			
-		}
-		else {
-			this.strategy.show();
-			
-			// sync the display on some systems.
-			// (on linux, this fixes event queue problems)
-			Toolkit.getDefaultToolkit().sync();
-			
-			return (!this.strategy.contentsLost());
-		}
-	}
-	
-	/** ************************************************************************* */
-	/** ******************* DISPOSING GRAPHICS ENGINE *************************** */
-	/** ************************************************************************* */
-	
-	public void cleanup() {
-		try {
-			Thread.sleep(200L);
-		}
-		catch (InterruptedException e) {
-		}
-		
-		try {
-			// dispose the frame
-			if (this.frame != null) {
-				this.frame.dispose();
-			}
-		}
-		catch (Exception e) {
-			System.err.println("ERROR: Shutting down graphics context " + e);
-			System.exit(-1);
-		}
-	}
-	
-	/** ************************************************************************* */
 	/** *************************** PROPERTIES ********************************** */
 	/** ************************************************************************* */
-	
-	public Dimension getSize() {
-		return this.size;
-	}
-	
-	public Component getComponent() {
-		return this.canvas;
-	}
-	
-	/**
-	 * Returns the top level frame where this graphics engine is being put on.
-	 * @return The top level frame.
-	 */
-	
-	public JDialog getFrame() {
-			return this.frame;
-		}
-	/**
-	 * Returns whether this graphics engine is using buffer strategy or volatile
-	 * image.
-	 * @return If a buffer strategy or a volatile image is used.
-	 */
-	public boolean isBufferStrategy() {
-		return (this.strategy != null);
-	}
-	
-	public String getGraphicsDescription() {
-		return "Windowed Mode [" + this.getSize().width + "x"
-		        + this.getSize().height + "]"
-		        + ((this.strategy != null) ? " with BufferStrategy" : "");
-	}
-	
-	public void setWindowTitle(String st) {
-		this.frame.setTitle(st);
-	}
-	
-	public String getWindowTitle() {
-		return this.frame.getTitle();
-	}
-	
-	public void setWindowIcon(Image icon) {
-		
-	}
-	
+
+
+	@Override
 	public Image getWindowIcon() {
+		//Dialogs don't have icons
 		return null;
 	}
+	
+	public void addWindowListener(WindowListener wl){
+		this.frame.addWindowListener(wl);
+	}
+	
+	public void removeWindowListener(WindowListener wl){
+		this.frame.removeWindowListener(wl);
+	}	
 	
 }

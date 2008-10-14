@@ -23,6 +23,7 @@ import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.WindowListener;
 
 import javax.swing.JDialog;
 
@@ -61,15 +62,15 @@ public class JOGLWindowedMode implements BaseGraphics {
 	/** *************************** AWT COMPONENT ******************************* */
 	
 	private Frame frame;
-	private Dimension size;
+	protected Dimension size;
 	
 	/** *************************** JOGL COMPONENT ****************************** */
 	
-	private GLCanvas canvas;
+	protected GLCanvas canvas;
 	
 	/** *************************** JOGL RENDERER ******************************* */
 	
-	private JOGLRenderer renderer;
+	protected JOGLRenderer renderer;
 	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
@@ -81,6 +82,11 @@ public class JOGLWindowedMode implements BaseGraphics {
 	 */
 	public JOGLWindowedMode(Dimension d, boolean vsync, boolean drawdecorations) {
 		this.size = d;
+		this.initialize(vsync,drawdecorations);
+	}
+	
+	protected void initialize(boolean vsync, boolean drawdecorations)
+	{
 		
 		// sets game frame
 		this.frame = new Frame("Golden T Game Engine");
@@ -191,13 +197,6 @@ public class JOGLWindowedMode implements BaseGraphics {
 	}
 	
 	/**
-	 * Returns the top-level frame of this graphics engine.
-	 */
-	public Frame getFrame() {
-		return this.frame;
-	}
-	
-	/**
 	 * <i>Please refer to super class method documentation.</i>
 	 */
 	public String getGraphicsDescription() {
@@ -252,5 +251,13 @@ public class JOGLWindowedMode implements BaseGraphics {
 	public JOGLRenderer getRenderer() {
 		return this.renderer;
 	}
+	
+	public void addWindowListener(WindowListener wl){
+		this.frame.addWindowListener(wl);
+	}
+	
+	public void removeWindowListener(WindowListener wl){
+		this.frame.removeWindowListener(wl);
+	}	
 	
 }

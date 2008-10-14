@@ -26,6 +26,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -253,13 +254,6 @@ public class JOGLFullScreenMode implements BaseGraphics, Comparator {
 	}
 	
 	/**
-	 * Returns the top-level frame of this graphics engine.
-	 */
-	public Frame getFrame() {
-		return this.frame;
-	}
-	
-	/**
 	 * <i>Please refer to super class method documentation.</i>
 	 */
 	public String getGraphicsDescription() {
@@ -314,6 +308,14 @@ public class JOGLFullScreenMode implements BaseGraphics, Comparator {
 	public JOGLRenderer getRenderer() {
 		return this.renderer;
 	}
+	
+	public void addWindowListener(WindowListener wl){
+		this.frame.addWindowListener(wl);
+	}
+	
+	public void removeWindowListener(WindowListener wl){
+		this.frame.removeWindowListener(wl);
+	}	
 	
 	/** ************************************************************************* */
 	/** ********************* FIND THE BEST DISPLAY MODE ************************ */

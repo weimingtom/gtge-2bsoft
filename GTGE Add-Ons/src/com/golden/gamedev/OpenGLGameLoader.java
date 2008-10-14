@@ -230,9 +230,9 @@ public class OpenGLGameLoader extends GameLoader {
 					        .newInstance(new Object[] {
 					                d, new Boolean(vsync)
 					        });
-					mode.getFrame().removeWindowListener(
+					mode.removeWindowListener(
 					        WindowExitListener.getInstance());
-					mode.getFrame().addWindowListener(this);
+					mode.addWindowListener(this);
 					
 					this.gfx = mode;
 				}
@@ -278,9 +278,9 @@ public class OpenGLGameLoader extends GameLoader {
 				        .newInstance(new Object[] {
 				                d, new Boolean(vsync), new Boolean(drawdecorations)
 				        });
-				mode.getFrame().removeWindowListener(
+				mode.removeWindowListener(
 				        WindowExitListener.getInstance());
-				mode.getFrame().addWindowListener(this);
+				mode.addWindowListener(this);
 				
 				this.gfx = mode;
 			}
@@ -303,9 +303,9 @@ public class OpenGLGameLoader extends GameLoader {
 				        .newInstance(new Object[] {
 				                d, new Boolean(vsync), new Boolean(drawdecorations)
 				        });
-				mode.getFrame().removeWindowListener(
+				mode.removeWindowListener(
 				        WindowExitListener.getInstance());
-				mode.getFrame().addWindowListener(this);
+				mode.addWindowListener(this);
 				
 				this.gfx = mode;
 			}

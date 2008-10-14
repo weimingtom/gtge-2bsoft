@@ -27,6 +27,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.VolatileImage;
 import java.util.ArrayList;
@@ -319,14 +320,6 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 	}
 	
 	/**
-	 * Returns the top level frame where this graphics engine is being put on.
-	 * @return The top level frame.
-	 */
-	public Frame getFrame() {
-		return this.frame;
-	}
-	
-	/**
 	 * Returns whether this graphics engine is using buffer strategy or volatile
 	 * image.
 	 * @return If a buffer strategy or a volatile image is used.
@@ -360,6 +353,14 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 	public Image getWindowIcon() {
 		return this.frame.getIconImage();
 	}
+	
+	public void addWindowListener(WindowListener wl){
+		this.frame.addWindowListener(wl);
+	}
+	
+	public void removeWindowListener(WindowListener wl){
+		this.frame.removeWindowListener(wl);
+	}	
 	
 	/** ************************************************************************* */
 	/** ********************* FIND THE BEST DISPLAY MODE ************************ */
