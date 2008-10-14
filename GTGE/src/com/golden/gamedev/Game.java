@@ -1401,7 +1401,14 @@ public abstract class Game {
 	public boolean keyDown(int keyCode) {
 		return this.bsInput.isKeyDown(keyCode);
 	}
-	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
+	 * bsInput.isKeyReleased(int)}.
+	 */
+	public boolean keyUp(int keyCode){
+		return this.bsInput.isKeyReleased(keyCode);	
+	}
 	/**
 	 * Effectively equivalent to the call
 	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
