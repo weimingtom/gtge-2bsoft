@@ -28,6 +28,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.VolatileImage;
 
@@ -60,18 +61,18 @@ public class WindowedMode implements BaseGraphics {
 	
 	/** *************************** AWT COMPONENT ******************************* */
 	private Frame frame; // top frame where the canvas is put
-	private Canvas canvas;
+	protected Canvas canvas;
 	
-	private Dimension size;
+	protected Dimension size;
 	
 	/** *************************** BACK BUFFER ********************************* */
 	
-	private VolatileImage offscreen; // backbuffer image
+	protected VolatileImage offscreen; // backbuffer image
 	
-	private BufferStrategy strategy;
+	protected BufferStrategy strategy;
 	
 	// current graphics context
-	private Graphics2D currentGraphics;
+	protected Graphics2D currentGraphics;
 	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
@@ -86,7 +87,11 @@ public class WindowedMode implements BaseGraphics {
 	 */
 	public WindowedMode(Dimension d, boolean bufferstrategy, boolean drawdecorations) {
 		this.size = d;
-		
+		this.initialize(bufferstrategy,drawdecorations);
+	}
+	
+	protected void initialize(boolean bufferstrategy, boolean drawdecorations)
+	{
 		// sets game frame
 		this.frame = new Frame("Golden T Game Engine", WindowedMode.CONFIG);
 		
@@ -147,7 +152,7 @@ public class WindowedMode implements BaseGraphics {
 	/** ************************ GRAPHICS FUNCTION ****************************** */
 	/** ************************************************************************* */
 	
-	private boolean createBufferStrategy() {
+	protected boolean createBufferStrategy() {
 		boolean bufferCreated;
 		int num = 0;
 		do {
@@ -200,7 +205,7 @@ public class WindowedMode implements BaseGraphics {
 		return true;
 	}
 	
-	private void createBackBuffer() {
+	protected void createBackBuffer() {
 		if (this.offscreen != null) {
 			// backbuffer is already created,
 			// but not validate with current graphics configuration
@@ -299,17 +304,7 @@ public class WindowedMode implements BaseGraphics {
 	public Component getComponent() {
 		return this.canvas;
 	}
-	
-	/**
-	 * Returns the top level frame where this graphics engine is being put on.
-	 * @return The top level frame.
-	 */
-	//public Frame getFrame() {
-	//	return this.frame;
-	//}
-	public Frame getFrame() {
-			return this.frame;
-		}
+
 	/**
 	 * Returns whether this graphics engine is using buffer strategy or volatile
 	 * image.
@@ -345,4 +340,11 @@ public class WindowedMode implements BaseGraphics {
 		return this.frame.getIconImage();
 	}
 	
+	public void addWindowListener(WindowListener wl){
+		this.frame.addWindowListener(wl);
+	}
+	
+	public void removeWindowListener(WindowListener wl){
+		this.frame.removeWindowListener(wl);
+	}	
 }

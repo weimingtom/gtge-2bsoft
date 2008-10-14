@@ -292,6 +292,29 @@ public class SpriteGroup {
 	}
 	
 	/**
+	 * Updates all active sprites in this group, and check the schedule for
+	 * removing inactive sprites. 
+	 * Takes given gravity and wind constants into account, correcting x and y axis
+	 * values.
+	 * @see #getScanFrequence()
+	 */
+	public void update(long elapsedTime,double gravity, double wind) {
+		for (int i = 0; i < this.size; i++) {
+			if (this.sprites[i].isActive()) {
+				this.sprites[i].update(elapsedTime);
+			if(gravity!=0)
+				this.sprites[i].correctGravity(gravity);
+			if(wind!=0)
+				this.sprites[i].correctWind(wind);
+			}
+		}
+		
+		if (this.scanFrequence.action(elapsedTime)) {
+			// remove all inactive sprites
+			this.removeInactiveSprites();
+		}
+	}
+	/**
 	 * Throws any inactive sprites from this group, this method won't remove
 	 * immutable sprites, to remove all inactive sprites even though the
 	 * inactive sprites are immutable use {@link #removeImmutableSprites()}.
@@ -746,28 +769,5 @@ public class SpriteGroup {
 		        + this.getSize() + ", total=" + this.sprites.length
 		        + ", member=" + this.getActiveSprite() + ", background="
 		        + this.background + "]";
-	}
-	
-	/**
-	 * Takes given gravity constant into account and corrects x axis position.
-	 */
-	public void correctGravity(double gravity) {
-		for (int i = 0; i < this.size; i++) {
-			if (this.sprites[i].isActive()) {
-				this.sprites[i].correctGravity(gravity);
-			}
-		}
-    }
-	
-	/**
-	 * Takes given wind power constant into account and corrects x axis position.
-	 */
-	public void correctWind(double windpower) {
-		for (int i = 0; i < this.size; i++) {
-			if (this.sprites[i].isActive()) {
-				this.sprites[i].correctWind(windpower);
-			}
-		}
-    }
-	
+	}	
 }

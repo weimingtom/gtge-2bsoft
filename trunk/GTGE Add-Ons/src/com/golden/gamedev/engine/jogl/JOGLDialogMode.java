@@ -7,6 +7,7 @@ import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.WindowListener;
 
 import javax.swing.JDialog;
 
@@ -40,20 +41,11 @@ import com.golden.gamedev.util.ImageUtil;
  * @see com.golden.gamedev.OpenGLGameLoader
  * @see <a href="https://jogl.dev.java.net/" target="_blank">JOGL official site</a>
  */
-public class JOGLDialogMode implements BaseGraphics {
+public class JOGLDialogMode extends JOGLWindowedMode {
 	
 	/** *************************** AWT COMPONENT ******************************* */
 	
 	private JDialog frame;
-	private Dimension size;
-	
-	/** *************************** JOGL COMPONENT ****************************** */
-	
-	private GLCanvas canvas;
-	
-	/** *************************** JOGL RENDERER ******************************* */
-	
-	private JOGLRenderer renderer;
 	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
@@ -64,7 +56,11 @@ public class JOGLDialogMode implements BaseGraphics {
 	 * bufferstrategy.
 	 */
 	public JOGLDialogMode(Dimension d, boolean vsync, boolean drawdecorations) {
-		this.size = d;
+		super(d,vsync,drawdecorations);
+	}
+
+	@Override
+	public void initialize(boolean vsync, boolean drawdecorations){
 		
 		// sets game frame		
 		this.frame=new JDialog();
@@ -102,132 +98,22 @@ public class JOGLDialogMode implements BaseGraphics {
 		this.canvas.setRenderingThread(Thread.currentThread());
 		this.canvas.display();
 	}
-	
-	/** ************************************************************************* */
-	/** ************************ GRAPHICS FUNCTION ****************************** */
-	/** ************************************************************************* */
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public Graphics2D getBackBuffer() {
-		return this.renderer.getRenderer();
-	}
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public boolean flip() {
-		this.canvas.display();
-		
-		return true;
-	}
-	
-	/** ************************************************************************* */
-	/** ******************* DISPOSING GRAPHICS ENGINE *************************** */
-	/** ************************************************************************* */
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public void cleanup() {
-		try {
-			Thread.sleep(200L);
-		}
-		catch (InterruptedException e) {
-		}
-		
-		try {
-			// dispose the frame
-			if (this.frame != null) {
-				this.frame.dispose();
-			}
-		}
-		catch (Exception e) {
-			System.err.println("ERROR: Shutting down graphics context " + e);
-			System.exit(-1);
-		}
-	}
-	
+
 	/** ************************************************************************* */
 	/** *************************** PROPERTIES ********************************** */
 	/** ************************************************************************* */
 	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public Dimension getSize() {
-		return this.size;
-	}
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public Component getComponent() {
-		return this.canvas;
-	}
-	
-	/**
-	 * Returns the top-level frame of this graphics engine.
-	 */
-	public JDialog getFrame() {
-		return this.frame;
-	}
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public String getGraphicsDescription() {
-		return "JOGL Windowed Mode [" + this.getSize().width + "x"
-		        + this.getSize().height + "]"
-		        + ((this.isVSync()) ? " with VSync" : "");
-	}
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public void setWindowTitle(String st) {
-		this.frame.setTitle(st);
-	}
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public String getWindowTitle() {
-		return this.frame.getTitle();
-	}
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
-	public void setWindowIcon(Image icon) {
-		try {
-			this.frame.setIconImage(icon);
-		}
-		catch (Exception e) {
-		}
-	}
-	
-	/**
-	 * <i>Please refer to super class method documentation.</i>
-	 */
+	@Override
 	public Image getWindowIcon() {
 		return null;
+	}	
+	
+	public void addWindowListener(WindowListener wl){
+		this.frame.addWindowListener(wl);
 	}
 	
-	/**
-	 * Returns whether this graphics engine is vsync to display refresh rate or
-	 * not.
-	 */
-	public boolean isVSync() {
-		return (this.renderer != null) ? this.renderer.isVSync() : false;
-	}
-	
-	/**
-	 * Returns JOGL event listener and renderer.
-	 */
-	public JOGLRenderer getRenderer() {
-		return this.renderer;
-	}
+	public void removeWindowListener(WindowListener wl){
+		this.frame.removeWindowListener(wl);
+	}	
 	
 }

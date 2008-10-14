@@ -407,9 +407,9 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				FullScreenMode mode = null;
 				try {
 					mode = new FullScreenMode(d, bufferstrategy);
-					mode.getFrame().removeWindowListener(
+					mode.removeWindowListener(
 					        WindowExitListener.getInstance());
-					mode.getFrame().addWindowListener(this);
+					mode.addWindowListener(this);
 					
 					this.gfx = mode;
 				}
@@ -433,18 +433,18 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 			if (ScreenMode==1) {
 				// windowed mode
 				WindowedMode mode = new WindowedMode(d, bufferstrategy, drawdecorations);
-				mode.getFrame().removeWindowListener(
+				mode.removeWindowListener(
 				        WindowExitListener.getInstance());
-				mode.getFrame().addWindowListener(this);
+				mode.addWindowListener(this);
 				
 				this.gfx = mode;
 			}
             if (ScreenMode==2){
                             // Dialog mode
 				DialogMode mode = new DialogMode(d, bufferstrategy, drawdecorations);
-				mode.getFrame().removeWindowListener(
+				mode.removeWindowListener(
 				        WindowExitListener.getInstance());
-				mode.getFrame().addWindowListener(this);
+				mode.addWindowListener(this);
 				this.gfx = mode;
                         }
                             
@@ -652,11 +652,11 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 *    // only fullscreen and window mode the game is using frame
 	 *    if (gfx instanceof FullScreenMode) {
 	 *       // remove this listener
-	 *       ((FullScreenMode) gfx).getFrame().removeWindowListener(game);
+	 *       ((FullScreenMode) gfx).removeWindowListener(game);
 	 *    }
 	 *    if (gfx instanceof WindowedMode) {
 	 *       // remove this listener
-	 *       ((WindowedMode) gfx).getFrame().removeWindowListener(game);
+	 *       ((WindowedMode) gfx).removeWindowListener(game);
 	 *    }
 	 *    game.start();
 	 * </pre>
