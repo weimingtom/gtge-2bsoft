@@ -520,5 +520,29 @@ public class LWJGLInput implements BaseInput {
 		
 		return new Cursor(w, h, x, y, 1, scratch.asIntBuffer(), null);
 	}
+
+    public int getKeyTyped() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean isKeyTyped(int keyCode) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public long getRepeatDelay() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setRepeatDelay(long delay) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public long getRepeatRate() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setRepeatRate(long rate) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 	
 }

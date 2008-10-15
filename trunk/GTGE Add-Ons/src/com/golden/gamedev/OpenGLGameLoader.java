@@ -112,7 +112,7 @@ public class OpenGLGameLoader extends GameLoader {
 	 * Initializes OpenGL LWJGL graphics engine with specified size, mode, and
 	 * associates it with specified <code>Game</code> object.
 	 */
-	public void setupLWJGL(Game game, Dimension d, boolean fullscreen, boolean vsync) {
+	public void setupLWJGL(Game game, Dimension d, ScreenMode screenMode, boolean vsync) {
 		try {
 			// validate java version first
 			if (!this.validJavaVersion()) {
@@ -134,9 +134,12 @@ public class OpenGLGameLoader extends GameLoader {
 				// don't bother to continue
 				System.exit(-1);
 			}
-			
+			boolean full=false;
+                        if (screenMode==ScreenMode.FullScreen)
+                            full=true;
+                                               
 			// time to create the OpenGL Graphics Engine
-			LWJGLMode mode = new LWJGLMode(d, fullscreen, vsync);
+			LWJGLMode mode = new LWJGLMode(d, full, vsync);
 			mode.setWindowListener(this);
 			
 			this.gfx = mode;
@@ -159,10 +162,7 @@ public class OpenGLGameLoader extends GameLoader {
 			if (this.gfx != null) {
 				this.gfx.cleanup();
 			}
-			if(fullscreen==true)
-				this.setup(game, d, 0, false,true);
-			else
-				this.setup(game, d, 1, false,true);
+			this.setup(game, d, screenMode, false,true);
 		}
 	}
 	
@@ -171,8 +171,8 @@ public class OpenGLGameLoader extends GameLoader {
 	 * vsync by default, and associates it with specified <code>Game</code>
 	 * object.
 	 */
-	public void setupLWJGL(Game game, Dimension d, boolean fullscreen) {
-		this.setupLWJGL(game, d, fullscreen, true);
+	public void setupLWJGL(Game game, Dimension d, ScreenMode screenMode) {
+		this.setupLWJGL(game, d, screenMode, true);
 	}
 	
 	/** ************************************************************************* */
@@ -180,10 +180,10 @@ public class OpenGLGameLoader extends GameLoader {
 	/** ************************************************************************* */
 	
 	/**
-	 * Initializes OpenGL JOGL graphics engine with specified size, mode, and
+	 * Initializes OpenGL JOGL graphics engine with specified size, ScreenMode, and
 	 * associates it with specified <code>Game</code> object.
 	 */
-	public void setupJOGL(Game game, Dimension d, int ScreenMode, boolean vsync, boolean drawdecorations) {
+	public void setupJOGL(Game game, Dimension d, ScreenMode screenMode, boolean vsync, boolean drawdecorations) {
 		try {
 			// validate java version first
 			if (!this.validJavaVersion()) {
@@ -208,7 +208,7 @@ public class OpenGLGameLoader extends GameLoader {
 			
 			// time to create the OpenGL Graphics Engine
 			
-			if (ScreenMode == 0) {
+			if (screenMode == ScreenMode.FullScreen) {
 				// fullscreen mode
 				JOGLFullScreenMode mode = null;
 				try {
@@ -252,7 +252,7 @@ public class OpenGLGameLoader extends GameLoader {
 					        "Graphics Engine Initialization",
 					        JOptionPane.ERROR_MESSAGE);
 					// fail-safe
-					ScreenMode = 1;
+					screenMode = ScreenMode.Window;
 					
 					if (mode != null) {
 						mode.cleanup();
@@ -260,7 +260,7 @@ public class OpenGLGameLoader extends GameLoader {
 				}
 			}
 			
-			if (ScreenMode == 1) {
+			if (screenMode == ScreenMode.Window) {
 				// using reflection to load the class, this is a work around to
 				// avoid
 				// JOGL static initialization exception when JOGL library is not
@@ -285,7 +285,7 @@ public class OpenGLGameLoader extends GameLoader {
 				this.gfx = mode;
 			}
 			
-			if (ScreenMode == 2) {
+			if (screenMode == ScreenMode.Dialog) {
 				// using reflection to load the class, this is a work around to
 				// avoid
 				// JOGL static initialization exception when JOGL library is not
@@ -333,7 +333,7 @@ public class OpenGLGameLoader extends GameLoader {
 				this.gfx.cleanup();
 			}
 			
-			this.setup(game, d, ScreenMode, drawdecorations);
+			this.setup(game, d, screenMode, drawdecorations);
 		}
 	}
 
@@ -348,8 +348,8 @@ public class OpenGLGameLoader extends GameLoader {
          *                   If it is equal to 2, the game runs in Dialog mode.
 	 */
 	
-	public void setupJOGL(Game game, Dimension d, int ScreenMode) {
-		this.setupJOGL(game, d, ScreenMode, true, true);
+	public void setupJOGL(Game game, Dimension d, ScreenMode screenMode) {
+		this.setupJOGL(game, d, screenMode, true, true);
 	}
 	
 	/**
@@ -361,8 +361,8 @@ public class OpenGLGameLoader extends GameLoader {
          *                   If it is equal to 2, the game runs in Dialog mode.
 	 */
 	
-	public void setupJOGL(Game game, Dimension d, int ScreenMode, boolean drawdecorations) {
-		this.setupJOGL(game, d, ScreenMode, true,drawdecorations);
+	public void setupJOGL(Game game, Dimension d, ScreenMode screenMode, boolean drawdecorations) {
+		this.setupJOGL(game, d, screenMode, true,drawdecorations);
 	}
 	
 }
