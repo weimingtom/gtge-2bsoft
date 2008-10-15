@@ -38,6 +38,9 @@ import com.golden.gamedev.engine.graphics.WindowExitListener;
 import com.golden.gamedev.engine.graphics.WindowedMode;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
 
+
+
+
 /**
  * <code>GameLoader</code> class is the class that manages <code>Game</code>
  * class initialization.
@@ -57,7 +60,7 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * 	public static void main(String[] args) {
  *          &lt;b&gt;GameLoader&lt;/b&gt; game = new GameLoader();
  *          // init game with fullscreen mode, 640x480 screen resolution
- *          game.setup(&lt;b&gt;new YourGame()&lt;/b&gt;, new Dimension(640,480), true);
+ *          game.setup(&lt;b&gt;new YourGame()&lt;/b&gt;, new Dimension(640,480),GameLoader.ScreenMode.Window, true,true);
  *          game.start();
  *       }
  * }
@@ -100,6 +103,23 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  */
 public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	
+        /** 
+         * Types of screen that the game can be ran.
+	*/ 
+        public enum ScreenMode{ 
+            /** 
+             * The game runs in full screen.
+             */
+            FullScreen, 
+            /**
+             * The game runs in Window mode.
+             */
+            Window,
+            /**
+             * The game runs in Dialog mode.
+             */
+            Dialog }
+    
 	/** ************************* VERSION VALIDATOR ***************************** */
 	
 	/**
@@ -372,13 +392,8 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	/**
 	 * Initializes graphics engine with specified size, ScreenMode, bufferstrategy,
 	 * and associates it with specified <code>Game</code> object.
-         * 
-         * @param ScreenMode If it is equal to 0, the game runs in full screen.
-         *                   If it is equal to 1, the game runs in Window mode.
-         *                   If it is equal to 2, the game runs in Dialog mode.
-         * 
 	 */
-	public void setup(Game game, Dimension d, int ScreenMode, boolean bufferstrategy, boolean drawdecorations) {
+	public void setup(Game game, Dimension d, ScreenMode screenMode, boolean bufferstrategy, boolean drawdecorations) {
 		try {
 			// validate java version first
 			if (!this.validJavaVersion()) {
@@ -402,7 +417,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 			}
 			
 			// time to create the graphics engine
-			if (ScreenMode==0) {
+			if (screenMode==ScreenMode.FullScreen) {
 				// fullscreen mode
 				FullScreenMode mode = null;
 				try {
@@ -422,7 +437,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 					        "Graphics Engine Initialization",
 					        JOptionPane.ERROR_MESSAGE);
 					// fail-safe
-					ScreenMode = 1;
+					screenMode = ScreenMode.Window;
 					
 					if (mode != null) {
 						mode.cleanup();
@@ -430,7 +445,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				}
 			}
 			
-			if (ScreenMode==1) {
+			if (screenMode==ScreenMode.Window) {
 				// windowed mode
 				WindowedMode mode = new WindowedMode(d, bufferstrategy, drawdecorations);
 				mode.removeWindowListener(
@@ -439,7 +454,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				
 				this.gfx = mode;
 			}
-            if (ScreenMode==2){
+                        if (screenMode==ScreenMode.Dialog){
                             // Dialog mode
 				DialogMode mode = new DialogMode(d, bufferstrategy, drawdecorations);
 				mode.removeWindowListener(
@@ -476,12 +491,9 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * bufferstrategy and window decorations by default, and associates 
 	 * it with specified <code>Game</code> object.
          * 
-         * @param ScreenMode If it is equal to 0, the game runs in full screen.
-         *                   If it is equal to 1, the game runs in Window mode.
-         *                   If it is equal to 2, the game runs in Dialog mode.
-	 */
-	public void setup(Game game, Dimension d, int ScreenMode) {
-		this.setup(game, d, ScreenMode, true, true);
+         */
+	public void setup(Game game, Dimension d, ScreenMode screenMode) {
+		this.setup(game, d, screenMode, true, true);
 	}
 	
 	/**
@@ -489,12 +501,9 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * bufferstrategy by default, and associates
 	 * it with specified <code>Game</code> object.
          * 
-         * @param ScreenMode If it is equal to 0, the game runs in full screen.
-         *                   If it is equal to 1, the game runs in Window mode.
-         *                   If it is equal to 2, the game runs in Dialog mode.
-	 */
-	public void setup(Game game, Dimension d, int ScreenMode, boolean drawdecorations) {
-		this.setup(game, d, ScreenMode, true,drawdecorations);
+         */
+	public void setup(Game game, Dimension d, ScreenMode screenMode, boolean drawdecorations) {
+		this.setup(game, d, screenMode, true,drawdecorations);
 	}
 	
 	/**

@@ -1,0 +1,8 @@
+com.golden.gamedev.engine
+com.golden.gamedev.engine.network
+com.golden.gamedev.engine.network.manipulator
+com.golden.gamedev.engine.network.packet
+com.golden.gamedev.engine.network.tcp
+test
+test.chat
+test.packet

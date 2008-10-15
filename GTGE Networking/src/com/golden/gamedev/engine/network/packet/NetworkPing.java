@@ -61,8 +61,8 @@ public final class NetworkPing extends NetworkPacket {
 		return NetworkPing.ID;
 	}
 	
-	public static void setID(short id) {
-		ID = id;
+	public void setID(short id) {
+		NetworkPing.ID = id;
 	}
 	
 	public boolean isCompressed() {
