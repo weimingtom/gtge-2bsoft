@@ -34,7 +34,9 @@ import com.golden.gamedev.engine.BaseTimer;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
+import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
+import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
 
@@ -461,6 +463,50 @@ public abstract class GameObject {
 			        .getY()
 			        + sprite.getHeight());
 		}
+	}
+	
+	/**
+	 * Returns sprite in specified sprite group that intersected with mouse
+	 * pointer, or null if no sprite intersected with mouse pointer.
+	 * 
+	 * @param field playfield to check its intersection with mouse pointer
+	 * @param pixelCheck true, checking the sprite image with pixel precision
+	 */
+	public Sprite checkPosMouse(SpriteGroup group, boolean pixelCheck) {
+		Sprite[] sprites = group.getSprites();
+		int size = group.getSize();
+		
+		for (int i = 0; i < size; i++) {
+			if (sprites[i].isActive()
+			        && this.checkPosMouse(sprites[i], pixelCheck)) {
+				return sprites[i];
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Returns sprite in specified playfield that intersected with mouse
+	 * pointer, or null if no sprite intersected with mouse pointer.
+	 * 
+	 * @param field playfield to check its intersection with mouse pointer
+	 * @param pixelCheck true, checking the sprite image with pixel precision
+	 */
+	public Sprite checkPosMouse(PlayField field, boolean pixelCheck) {
+		SpriteGroup[] groups = field.getGroups();
+		int size = groups.length;
+		
+		for (int i = 0; i < size; i++) {
+			if (groups[i].isActive()) {
+				Sprite s = this.checkPosMouse(groups[i], pixelCheck);
+				if (s != null) {
+					return s;
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
