@@ -55,6 +55,7 @@ public class AdvanceSprite extends AnimatedSprite {
 	
 	private int status = -1;
 	private int direction = -1;
+    private int pos = 0;
 	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
@@ -111,6 +112,12 @@ public class AdvanceSprite extends AnimatedSprite {
 	/** ************************ SETTING ANIMATION ****************************** */
 	/** ************************************************************************* */
 	
+        /**
+	 * Sets true to animate this sprite.
+	 */
+	public void setAnimate(boolean b) {
+		super.setAnimate(b);
+	}
 	/**
 	 * Sets sprite animation frame to specified animation array. The sprite will
 	 * be animated according to the animation array.
@@ -124,6 +131,7 @@ public class AdvanceSprite extends AnimatedSprite {
 	 * @see #setAnimationFrame(int, int)
 	 */
 	public void setAnimationFrame(int[] animation) {
+		this.pos = 0;
 		if (this.animationFrame != animation) {
 			this.animationFrame = animation;
 			
@@ -198,6 +206,7 @@ public class AdvanceSprite extends AnimatedSprite {
 	 * @see #setStatus(int)
 	 */
 	public void setDirection(int dir) {
+		this.pos = 0;
 		if (this.direction != dir) {
 			int oldDir = this.direction;
 			this.direction = dir;
@@ -227,6 +236,7 @@ public class AdvanceSprite extends AnimatedSprite {
 	 * @see #setDirection(int)
 	 */
 	public void setStatus(int stat) {
+		this.pos = 0;
 		if (this.status != stat) {
 			int oldStat = this.status;
 			this.status = stat;
@@ -252,6 +262,7 @@ public class AdvanceSprite extends AnimatedSprite {
 	 * @see #animationChanged(int, int, int, int)
 	 */
 	public void setAnimation(int stat, int dir) {
+		this.pos = 0;
 		if (this.status != stat || this.direction != dir) {
 			int oldStat = this.status;
 			int oldDir = this.direction;
@@ -263,13 +274,40 @@ public class AdvanceSprite extends AnimatedSprite {
 		}
 	}
 	
+        /** ************************************************************************* */
+	/** *************************** UPDATE SPRITE ******************************* */
+	/** ************************************************************************* */
+        
+        /**
+	 * Updates sprite animation.
+	 * <p>
+	 * 
+	 * The animation frame is increased by one, and if the animation frame is
+	 * exceeded {@linkplain #getFinishAnimationFrame() total animation frame},
+	 * the animation frame stop the animation if the animation is not
+	 * set to {@linkplain #isLoopAnim() loop continously}.
+	 */
+	protected void updateAnimation() {
+        if (this.isAnimate()) {
+        	pos++;
+			if (pos == (this.animationFrame.length-1)) {
+				if (!this.isLoopAnim()) {
+					this.setAnimate(false);
+				}
+	                        else {
+	                            pos = 0;
+	                        }
+			}
+        }
+	}
+        
 	/** ************************************************************************* */
 	/** ************************** RENDER SPRITE ******************************** */
 	/** ************************************************************************* */
 	
 	public void render(Graphics2D g, int xs, int ys) {
 		if (this.animationFrame != null) {
-			g.drawImage(this.getImage(this.animationFrame[this.getFrame()]),
+			g.drawImage(this.getImage(this.animationFrame[this.pos]),
 			        xs, ys, null);
 			
 		}
