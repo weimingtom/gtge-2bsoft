@@ -242,7 +242,6 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 			        "ERROR: GameLoader.setup(Game, Dimension, Fullscreen); need to be called\n"
 			                + "before calling GameLoader.start();",
 			        "Game Initialization", JOptionPane.ERROR_MESSAGE);
-			
 			System.exit(0);
 		}
 		
@@ -449,19 +448,19 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				// windowed mode
 				WindowedMode mode = new WindowedMode(d, bufferstrategy, drawdecorations);
 				mode.removeWindowListener(
-				        WindowExitListener.getInstance());
+						WindowExitListener.getInstance());
 				mode.addWindowListener(this);
-				
+
 				this.gfx = mode;
 			}
-                        if (screenMode==ScreenMode.Dialog){
-                            // Dialog mode
+			if (screenMode==ScreenMode.Dialog){
+				// Dialog mode
 				DialogMode mode = new DialogMode(d, bufferstrategy, drawdecorations);
 				mode.removeWindowListener(
-				        WindowExitListener.getInstance());
+						WindowExitListener.getInstance());
 				mode.addWindowListener(this);
 				this.gfx = mode;
-                        }
+			}
                             
 			
 			this.game = game;

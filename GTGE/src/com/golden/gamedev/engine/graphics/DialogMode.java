@@ -124,4 +124,22 @@ public class DialogMode extends WindowedMode {
 		this.frame.removeWindowListener(wl);
 	}	
 	
+	public void cleanup() {
+		try {
+			Thread.sleep(200L);
+		}
+		catch (InterruptedException e) {
+		}
+		
+		try {
+			// dispose the frame
+			if (this.frame != null) {
+				this.frame.dispose();
+			}
+		}
+		catch (Exception e) {
+			System.err.println("ERROR: Shutting down graphics context " + e);
+			this.frame.setVisible(false);
+		}
+	}
 }
