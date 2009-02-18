@@ -45,6 +45,7 @@ import com.golden.gamedev.engine.BaseLoader;
 import com.golden.gamedev.engine.BaseTimer;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
+import com.golden.gamedev.engine.graphics.DialogMode;
 import com.golden.gamedev.engine.input.AWTInput;
 import com.golden.gamedev.engine.timer.SystemTimer;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
@@ -690,7 +691,7 @@ public abstract class Game {
 	
 	protected void notifyExit(boolean fullyClose) {
 		if ((this.bsGraphics instanceof Applet) == false) {
-			if(fullyClose){
+			if(fullyClose && (this.bsGraphics instanceof DialogMode) == false){
 				// non-applet game should call System.exit(0);
 				//fullyClose applies when there is another window that we don't want
 				//to close. Default value of true will fully clean the JVM.
