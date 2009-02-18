@@ -115,15 +115,15 @@ public class DialogMode extends WindowedMode {
 		//Dialogs don't have icons
 		return null;
 	}
-	
+	@Override
 	public void addWindowListener(WindowListener wl){
 		this.frame.addWindowListener(wl);
 	}
-	
+	@Override
 	public void removeWindowListener(WindowListener wl){
 		this.frame.removeWindowListener(wl);
 	}	
-	
+	@Override
 	public void cleanup() {
 		try {
 			Thread.sleep(200L);
