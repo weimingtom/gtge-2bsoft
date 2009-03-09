@@ -60,6 +60,7 @@ public class DialogMode extends WindowedMode {
 	
 		// sets game frame
 		this.frame = new JDialog();
+		this.frame.setAlwaysOnTop(true);
 		
 		this.frame.addWindowListener(WindowExitListener.getInstance());
 		this.frame.setResizable(false); // non resizable frame
@@ -74,6 +75,9 @@ public class DialogMode extends WindowedMode {
 		// frame title bar and border (frame insets) makes
 		// game screen smaller than requested size
 		// we must enlarge the frame by it's insets size
+
+		//TODO Correct the implementation of always on top.
+		this.frame.setAlwaysOnTop(true);
 
 		this.frame.setUndecorated(!drawdecorations);
 		this.frame.setVisible(true);
